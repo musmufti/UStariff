@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>US Tariffs Impact on Pakistan's Exports</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Impact of US Tariffs on Pakistan's Exports</h1>
+        <p class="subtitle">Analysis of the 29% tariff imposed on Pakistan's $5.5 billion exports to the US</p>
+        
+        <div class="scenario-selector">
+            <h2>Impact Scenario Analysis</h2>
+            <div class="button-group">
+                <button id="low-impact" class="scenario-btn">Low Impact (10%)</button>
+                <button id="medium-impact" class="scenario-btn active">Medium Impact (20%)</button>
+                <button id="high-impact" class="scenario-btn">High Impact (30%)</button>
+            </div>
+            <p id="scenario-description" class="scenario-desc">Medium Impact: Some US buyers switch to alternative suppliers; others negotiate price reductions</p>
+        </div>
+        
+        <div class="metrics-container">
+            <div class="metric-card">
+                <div class="metric-title">Annual US Exports</div>
+                <div class="metric-value">$5.5B</div>
+                <div class="metric-subtitle">Textiles: $2.8B (79%)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">Estimated Annual Loss</div>
+                <div id="impact-loss" class="metric-value">$1.1B</div>
+                <div class="metric-subtitle">In medium impact scenario</div>
+            </div>
+        </div>
+        
+        <div class="chart-grid">
+            <div class="chart-container">
+                <h2>Monthly Export Projections</h2>
+                <canvas id="monthly-chart"></canvas>
+            </div>
+            
+            <div class="chart-container">
+                <h2>Pakistan's Export Categories to US</h2>
+                <canvas id="categories-chart"></canvas>
+            </div>
+            
+            <div class="chart-container">
+                <h2>Textiles vs Other Sectors Impact</h2>
+                <canvas id="sectors-chart"></canvas>
+            </div>
+            
+            <div class="chart-container">
+                <h2>Tariff Rates on Major US Trading Partners</h2>
+                <canvas id="tariff-chart"></canvas>
+            </div>
+        </div>
+        
+        <div class="sources-section">
+            <h2>Data Sources & Methodology</h2>
+            <!-- Add your sources here -->
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
