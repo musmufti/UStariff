@@ -1,264 +1,300 @@
-// Pakistan's export data to the US
-const pakistanExportData = {
-    totalExports: 5.5, // $5.5 billion annual exports to the US
-    textileExports: 2.8, // $2.8 billion in textile and apparel exports
-    tariffRate: 29, // 29% reciprocal tariff imposed by the US
-    previousTariffRate: 10, // Baseline tariff before the increase
-    pakistanTariffOnUS: 58 // Pakistan's tariff on US goods
-};
-
-// Monthly export data
-const monthlyExportData = [
-    { month: "Jan", exports: 0.46, textiles: 0.36 },
-    { month: "Feb", exports: 0.48, textiles: 0.38 },
-    { month: "Mar", exports: 0.52, textiles: 0.41 },
-    { month: "Apr", exports: 0.47, textiles: 0.37 },
-    { month: "May", exports: 0.45, textiles: 0.36 },
-    { month: "Jun", exports: 0.44, textiles: 0.35 },
-    { month: "Jul", exports: 0.43, textiles: 0.34 },
-    { month: "Aug", exports: 0.46, textiles: 0.36 },
-    { month: "Sep", exports: 0.45, textiles: 0.35 },
-    { month: "Oct", exports: 0.47, textiles: 0.37 },
-    { month: "Nov", exports: 0.44, textiles: 0.35 },
-    { month: "Dec", exports: 0.43, textiles: 0.34 }
-];
-
-// Impact rates for different scenarios
-const impactRates = {
-    low: { overall: 0.9, textile: 0.85 },
-    medium: { overall: 0.8, textile: 0.75 },
-    high: { overall: 0.7, textile: 0.65 }
-};
-
-// Export categories for Pakistan's exports to US
-const exportCategories = [
-    { name: "Textiles", value: 79 },
-    { name: "Leather", value: 5 },
-    { name: "Surgical", value: 4 },
-    { name: "Rice", value: 3 },
-    { name: "Sports", value: 3 },
-    { name: "Others", value: 6 }
-];
-
-// Compare Pakistan with other countries affected by tariffs
-const countryComparison = [
-    { country: "Pakistan", tariffRate: 29, exports: 5.5 },
-    { country: "China", tariffRate: 34, exports: 427.2 },
-    { country: "Vietnam", tariffRate: 46, exports: 127.5 },
-    { country: "Thailand", tariffRate: 36, exports: 41.8 },
-    { country: "India", tariffRate: 27, exports: 83.2 },
-    { country: "EU", tariffRate: 20, exports: 587.1 }
-];
-
-// Scenario descriptions
-const scenarioDescriptions = {
-    low: "Low Impact: US buyers absorb part of the tariff cost; minimal shift to other suppliers",
-    medium: "Medium Impact: Some US buyers switch to alternative suppliers; others negotiate price reductions",
-    high: "High Impact: Significant shift to suppliers from countries with lower tariffs; major price pressure"
-};
-
-// Current scenario
-let currentScenario = 'medium';
-
-// Chart instances
-let monthlyChart, categoriesChart, sectorsChart, tariffChart;
-
-// Initialize charts
-function initCharts() {
-    // Monthly exports chart
-    const monthlyCtx = document.getElementById('monthly-chart').getContext('2d');
-    monthlyChart = new Chart(monthlyCtx, {
-        type: 'line',
-        data: getMonthlyChartData(),
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    title: {
-                        display: true,
-                        text: '$ Billion'
-                    }
-                }
-            }
-        }
-    });
-
-    // Categories chart
-    const categoriesCtx = document.getElementById('categories-chart').getContext('2d');
-    categoriesChart = new Chart(categoriesCtx, {
-        type: 'pie',
-        data: {
-            labels: exportCategories.map(item => item.name),
-            datasets: [{
-                data: exportCategories.map(item => item.value),
-                backgroundColor: [
-                    '#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#9E9E9E', '#616161'
-                ]
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            return `${context.label}: ${context.raw}%`;
-                        }
-                    }
-                }
-            }
-        }
-    });
-
-    // Sectors impact chart
-    const sectorsCtx = document.getElementById('sectors-chart').getContext('2d');
-    sectorsChart = new Chart(sectorsCtx, {
-        type: 'bar',
-        data: getSectorsChartData(),
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    title: {
-                        display: true,
-                        text: '$ Billion'
-                    }
-                }
-            }
-        }
-    });
-
-    // Tariff comparison chart
-    const tariffCtx = document.getElementById('tariff-chart').getContext('2d');
-    tariffChart = new Chart(tariffCtx, {
-        type: 'bar',
-        data: {
-            labels: countryComparison.map(item => item.country),
-            datasets: [{
-                label: 'Tariff Rate (%)',
-                data: countryComparison.map(item => item.tariffRate),
-                backgroundColor: '#1976d2'
-            }]
-        },
-        options: {
-            indexAxis: 'y',
-            responsive: true,
-            scales: {
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Tariff Rate (%)'
-                    }
-                }
-            }
-        }
-    });
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
 }
 
-// Get monthly chart data based on current scenario
-function getMonthlyChartData() {
-    const currentRate = impactRates[currentScenario];
-    
-    return {
-        labels: monthlyExportData.map(item => item.month),
-        datasets: [
-            {
-                label: 'Current Exports',
-                data: monthlyExportData.map(item => item.exports),
-                borderColor: '#1565C0',
-                backgroundColor: 'rgba(21, 101, 192, 0.1)',
-                tension: 0.1
-            },
-            {
-                label: `${currentScenario.charAt(0).toUpperCase() + currentScenario.slice(1)} Impact`,
-                data: monthlyExportData.map(item => item.exports * currentRate.overall),
-                borderColor: '#FF6B6B',
-                backgroundColor: 'rgba(255, 107, 107, 0.1)',
-                borderDash: [5, 5],
-                tension: 0.1
-            }
-        ]
-    };
+body {
+    background-color: #f5f5f5;
+    padding: 20px;
+    color: #333;
 }
 
-// Get sectors chart data based on current scenario
-function getSectorsChartData() {
-    const currentRate = impactRates[currentScenario];
-    
-    return {
-        labels: ['Q1', 'Q2', 'Q3', 'Q4'],
-        datasets: [
-            {
-                label: 'Current Textiles',
-                data: [1.15, 1.08, 1.05, 0.92],
-                backgroundColor: '#0088FE'
-            },
-            {
-                label: 'Current Other',
-                data: [0.31, 0.28, 0.27, 0.44],
-                backgroundColor: '#FFBB28'
-            },
-            {
-                label: 'Projected Textiles',
-                data: [1.15 * currentRate.textile, 1.08 * currentRate.textile, 1.05 * currentRate.textile, 0.92 * currentRate.textile],
-                backgroundColor: '#90CAF9'
-            },
-            {
-                label: 'Projected Other',
-                data: [0.31 * currentRate.overall, 0.28 * currentRate.overall, 0.27 * currentRate.overall, 0.44 * currentRate.overall],
-                backgroundColor: '#4CAF50'
-            }
-        ]
-    };
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-// Update charts based on selected scenario
-function updateCharts() {
-    // Update monthly chart
-    monthlyChart.data = getMonthlyChartData();
-    monthlyChart.update();
-    
-    // Update sectors chart
-    sectorsChart.data = getSectorsChartData();
-    sectorsChart.update();
-    
-    // Update impact loss display
-    const impactLoss = pakistanExportData.totalExports * (1 - impactRates[currentScenario].overall);
-    document.getElementById('impact-loss').innerText = `$${impactLoss.toFixed(1)}B`;
-    
-    // Update scenario description
-    document.getElementById('scenario-description').innerText = scenarioDescriptions[currentScenario];
+h1 {
+    text-align: center;
+    margin-bottom: 5px;
+    color: #333;
+    font-size: 24px;
 }
 
-// Add event listeners to scenario buttons
-document.addEventListener('DOMContentLoaded', function() {
-    initCharts();
-    
-    // Add click event listeners to scenario buttons
-    document.getElementById('low-impact').addEventListener('click', function() {
-        setScenario('low');
-    });
-    
-    document.getElementById('medium-impact').addEventListener('click', function() {
-        setScenario('medium');
-    });
-    
-    document.getElementById('high-impact').addEventListener('click', function() {
-        setScenario('high');
-    });
-});
+h2 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #333;
+}
 
-// Set the active scenario
-function setScenario(scenario) {
-    // Update current scenario
-    currentScenario = scenario;
+h3 {
+    font-size: 15px;
+    margin-bottom: 10px;
+    color: #444;
+}
+
+.subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.scenario-btn {
+    padding: 10px 15px;
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background-color 0.3s;
+}
+
+.scenario-btn:hover {
+    background-color: #e0e0e0;
+}
+
+.scenario-btn.active {
+    background-color: #1976d2;
+    color: white;
+}
+
+.scenario-desc {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 13px;
+    margin-bottom: 15px;
+}
+
+.metrics-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.metric-card {
+    border: 1px solid #eee;
+    padding: 12px;
+    border-radius: 6px;
+}
+
+.metric-title {
+    color: #666;
+    font-size: 13px;
+}
+
+.metric-value {
+    font-size: 22px;
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+#impact-loss {
+    color: #d32f2f;
+}
+
+.metric-subtitle {
+    font-size: 11px;
+    color: #666;
+}
+
+.export-breakdown {
+    margin-top: 15px;
+}
+
+.breakdown-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.breakdown-item {
+    background-color: #f5f5f5;
+    padding: 10px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.breakdown-title {
+    font-size: 11px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.breakdown-value {
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.chart-container {
+    height: 250px;
+    position: relative;
+}
+
+.pie-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.pie-chart {
+    height: 200px;
+}
+
+.pie-description {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.pie-description p {
+    margin-bottom: 10px;
+}
+
+.competitor-description {
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+.competitor-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 15px;
+    justify-content: center;
+}
+
+.competitor-item {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.3s;
+}
+
+.competitor-item.active {
+    opacity: 1;
+}
+
+.color-box {
+    width: 12px;
+    height: 12px;
+    margin-right: 5px;
+    border-radius: 2px;
+}
+
+.pakistan {
+    background-color: #0088FE;
+}
+
+.bangladesh {
+    background-color: #FFBB28;
+}
+
+.india {
+    background-color: #FF8042;
+}
+
+.vietnam {
+    background-color: #9E9E9E;
+}
+
+.radar-tooltip {
+    text-align: center;
+    font-size: 11px;
+    color: #666;
+    margin-top: 10px;
+}
+
+.sources-section {
+    margin-top: 20px;
+}
+
+.sources-content {
+    font-size: 13px;
+}
+
+.source-group {
+    margin-bottom: 15px;
+}
+
+.sources-content ul {
+    list-style-type: disc;
+    padding-left: 20px;
+    margin-bottom: 10px;
+}
+
+.sources-content li {
+    margin-bottom: 5px;
+}
+
+.sources-content a {
+    color: #1976d2;
+    text-decoration: none;
+}
+
+.sources-content a:hover {
+    text-decoration: underline;
+}
+
+.footer {
+    text-align: center;
+    font-size: 12px;
+    color: #777;
+    margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+    .grid-container {
+        grid-template-columns: 1fr;
+    }
     
-    // Update active button
-    document.querySelectorAll('.scenario-btn').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    document.getElementById(`${scenario}-impact`).classList.add('active');
+    .metrics-container {
+        grid-template-columns: 1fr;
+    }
     
-    // Update charts
-    updateCharts();
+    .breakdown-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .pie-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .pie-chart {
+        margin: 0 auto;
+        width: 80%;
+    }
 }
