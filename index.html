@@ -6,62 +6,181 @@
     <title>US Tariffs Impact on Pakistan's Exports</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 </head>
 <body>
     <div class="container">
         <h1>Impact of US Tariffs on Pakistan's Exports</h1>
         <p class="subtitle">Analysis of the 29% tariff imposed on Pakistan's $5.5 billion exports to the US</p>
         
-        <div class="scenario-selector">
-            <h2>Impact Scenario Analysis</h2>
-            <div class="button-group">
-                <button id="low-impact" class="scenario-btn">Low Impact (10%)</button>
-                <button id="medium-impact" class="scenario-btn active">Medium Impact (20%)</button>
-                <button id="high-impact" class="scenario-btn">High Impact (30%)</button>
-            </div>
-            <p id="scenario-description" class="scenario-desc">Medium Impact: Some US buyers switch to alternative suppliers; others negotiate price reductions</p>
-        </div>
-        
-        <div class="metrics-container">
-            <div class="metric-card">
-                <div class="metric-title">Annual US Exports</div>
-                <div class="metric-value">$5.5B</div>
-                <div class="metric-subtitle">Textiles: $2.8B (79%)</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-title">Estimated Annual Loss</div>
-                <div id="impact-loss" class="metric-value">$1.1B</div>
-                <div class="metric-subtitle">In medium impact scenario</div>
-            </div>
-        </div>
-        
-        <div class="chart-grid">
-            <div class="chart-container">
-                <h2>Monthly Export Projections</h2>
-                <canvas id="monthly-chart"></canvas>
+        <div class="grid-container">
+            <!-- Left Column -->
+            <div class="column">
+                <!-- Scenario Selector -->
+                <div class="card">
+                    <h2>Impact Scenario Analysis</h2>
+                    <div class="button-group">
+                        <button id="low-impact" class="scenario-btn">Low Impact (10%)</button>
+                        <button id="medium-impact" class="scenario-btn active">Medium Impact (20%)</button>
+                        <button id="high-impact" class="scenario-btn">High Impact (30%)</button>
+                    </div>
+                    <p id="scenario-description" class="scenario-desc">Medium Impact: Some US buyers switch to alternative suppliers; others negotiate price reductions</p>
+                    
+                    <!-- Financial Impact Summary -->
+                    <div class="metrics-container">
+                        <div class="metric-card">
+                            <div class="metric-title">Annual US Exports</div>
+                            <div class="metric-value">$5.5B</div>
+                            <div class="metric-subtitle">Textiles: $2.8B (79%)</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-title">Estimated Annual Loss</div>
+                            <div id="impact-loss" class="metric-value">$1.1B</div>
+                            <div class="metric-subtitle">In medium impact scenario</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Export breakdown -->
+                    <div class="export-breakdown">
+                        <h3>Exports Breakdown ($ Billion)</h3>
+                        <div class="breakdown-grid">
+                            <div class="breakdown-item">
+                                <div class="breakdown-title">Current Total</div>
+                                <div class="breakdown-value">$5.5</div>
+                            </div>
+                            <div class="breakdown-item">
+                                <div class="breakdown-title">Projected Total</div>
+                                <div id="projected-total" class="breakdown-value">$4.4</div>
+                            </div>
+                            <div class="breakdown-item">
+                                <div class="breakdown-title">Textile Loss</div>
+                                <div id="textile-loss" class="breakdown-value">$0.7</div>
+                            </div>
+                            <div class="breakdown-item">
+                                <div class="breakdown-title">Non-Textile Loss</div>
+                                <div id="nontextile-loss" class="breakdown-value">$0.4</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Monthly Export Projections -->
+                <div class="card">
+                    <h2>Monthly Export Projections</h2>
+                    <div class="chart-container">
+                        <canvas id="monthly-chart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Textiles vs Other Sectors Impact -->
+                <div class="card">
+                    <h2>Textiles vs Other Sectors Impact</h2>
+                    <div class="chart-container">
+                        <canvas id="sectors-chart"></canvas>
+                    </div>
+                </div>
             </div>
             
-            <div class="chart-container">
-                <h2>Pakistan's Export Categories to US</h2>
-                <canvas id="categories-chart"></canvas>
-            </div>
-            
-            <div class="chart-container">
-                <h2>Textiles vs Other Sectors Impact</h2>
-                <canvas id="sectors-chart"></canvas>
-            </div>
-            
-            <div class="chart-container">
-                <h2>Tariff Rates on Major US Trading Partners</h2>
-                <canvas id="tariff-chart"></canvas>
+            <!-- Right Column -->
+            <div class="column">
+                <!-- Export Categories -->
+                <div class="card">
+                    <h2>Pakistan's Export Categories to US</h2>
+                    <div class="pie-container">
+                        <div class="pie-chart">
+                            <canvas id="categories-chart"></canvas>
+                        </div>
+                        <div class="pie-description">
+                            <p><strong>Textile dominance:</strong> At 79% of exports, the textile sector is most vulnerable to tariff impacts.</p>
+                            <p><strong>Key insight:</strong> Diversifying export categories could reduce tariff vulnerability in the long term.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tariff Comparison -->
+                <div class="card">
+                    <h2>Tariff Rates on Major US Trading Partners</h2>
+                    <div class="chart-container">
+                        <canvas id="tariff-chart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Competitive Position -->
+                <div class="card">
+                    <h2>Competitive Position Analysis</h2>
+                    <p class="competitor-description">Select countries to compare with Pakistan (scores out of 10, higher is better)</p>
+                    
+                    <div class="competitor-selector">
+                        <div class="competitor-item active" data-country="Pakistan">
+                            <div class="color-box pakistan"></div>
+                            <span>Pakistan</span>
+                        </div>
+                        <div class="competitor-item active" data-country="Bangladesh">
+                            <div class="color-box bangladesh"></div>
+                            <span>Bangladesh</span>
+                        </div>
+                        <div class="competitor-item active" data-country="India">
+                            <div class="color-box india"></div>
+                            <span>India</span>
+                        </div>
+                        <div class="competitor-item active" data-country="Vietnam">
+                            <div class="color-box vietnam"></div>
+                            <span>Vietnam</span>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <canvas id="radar-chart"></canvas>
+                    </div>
+                    <div class="radar-tooltip">
+                        <p>Hover over axes for descriptions. Click country names to show/hide.</p>
+                    </div>
+                </div>
             </div>
         </div>
         
-        <div class="sources-section">
+        <!-- Sources Section -->
+        <div class="card sources-section">
             <h2>Data Sources & Methodology</h2>
-            <!-- Add your sources here -->
+            
+            <div class="sources-content">
+                <div class="source-group">
+                    <h3>Primary Data Sources:</h3>
+                    <ul>
+                        <li><a href="https://profit.pakistantoday.com.pk/2025/04/06/pakistan-to-engage-us-on-29-additional-tariffs/" target="_blank">Pakistan Today - Finance Minister's statements on $5.5B US exports and government response (April 6, 2025)</a></li>
+                        <li><a href="https://profit.pakistantoday.com.pk/2025/04/03/pakistan-slapped-with-29-tariff-as-trump-begins-trade-war-on-world/" target="_blank">Pakistan Today - Details on 29% tariff rate imposed on Pakistan (April 3, 2025)</a></li>
+                        <li><a href="https://en.dailypakistan.com.pk/03-Apr-2025/how-us-tariffs-could-slow-down-pakistans-textile-export" target="_blank">Daily Pakistan - Analysis on textile sector exports ($2.8B) and impact (April 3, 2025)</a></li>
+                        <li><a href="https://www.dawn.com/news/1901838" target="_blank">Dawn News - Economist perspectives on tariff impacts (April 3, 2025)</a></li>
+                        <li><a href="https://casstt.com/us-tariff-policies-implications-for-pakistans-trade/" target="_blank">CASS - Trade implications analysis (February 19, 2025)</a></li>
+                    </ul>
+                </div>
+                
+                <div class="source-group">
+                    <h3>Comparative Data:</h3>
+                    <ul>
+                        <li><a href="https://www.investopedia.com/how-much-reciprocal-tariff-will-be-for-each-country-trump-trade-11708072" target="_blank">Investopedia - Country comparison data on tariff rates</a></li>
+                        <li><a href="https://www.aljazeera.com/news/2025/4/2/where-are-the-highest-lowest-tariffs-trumps-reciprocal-tariffs-explained" target="_blank">Al Jazeera - Reciprocal tariff explanation and comparative analysis</a></li>
+                        <li><a href="https://www.cbsnews.com/news/trump-reciprocal-tariffs-liberation-day-list/" target="_blank">CBS News - Full list of reciprocal tariffs by country</a></li>
+                    </ul>
+                </div>
+                
+                <div class="source-group">
+                    <h3>Methodology Notes:</h3>
+                    <ul>
+                        <li>Scenario projections are based on economic elasticity models accounting for price sensitivity in US import markets</li>
+                        <li>Competitive position scores derived from industry reports and expert assessments</li>
+                        <li>Monthly export patterns reflect historical trends with seasonal adjustments</li>
+                        <li>Textile sector impact estimated based on previous trade policy effects and industry resilience factors</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Created for analysis purposes only. Data as of April 2025.</p>
         </div>
     </div>
+    
     <script src="script.js"></script>
 </body>
 </html>
