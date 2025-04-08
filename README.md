@@ -37,7 +37,7 @@ This dashboard was built using:
 - GitHub Pages for deployment and hosting
 
 ## About the Creator
-This analysis was developed by [Your Name], a [your profession/background] with expertise in [e.g., data visualization, economic analysis, international trade]. I created this dashboard to demonstrate how interactive data visualization can help stakeholders understand complex economic relationships and make more informed policy and business decisions.
+This analysis was developed by Mustafa Mufti, a data and policy analysis professional with expertise in  data visualization, financial inclusion, climate finance, economic analysis, international trade. I created this dashboard to demonstrate how interactive data visualization can help stakeholders understand complex economic relationships and make more informed policy and business decisions.
 
 ## Contact
 For questions, feedback, or collaboration opportunities, please contact me at:
