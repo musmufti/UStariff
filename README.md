@@ -2,6 +2,7 @@
 
 ## Project Overview
 This interactive dashboard visualizes the potential impact of the recently imposed 29% US tariffs on Pakistan's exports. The analysis examines various scenarios and economic implications across different sectors, with special focus on Pakistan's textile industry which accounts for 79% of the country's $5.5 billion exports to the United States.
+View the live dashboard: https://musmufti.github.io/UStariff/
 
 ## Purpose
 This project was created to:
